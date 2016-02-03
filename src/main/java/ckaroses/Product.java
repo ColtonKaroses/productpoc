@@ -1,5 +1,7 @@
 package ckaroses;
 
+import org.springframework.data.annotation.LastModifiedDate;
+
 import javax.annotation.Nullable;
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -26,10 +28,16 @@ public class Product {
     private String category;
 
     @Column(nullable = false)
+    @LastModifiedDate
     private Timestamp lastUpdated;
 
     @Column(nullable = false, precision = 15, scale = 2)
     private BigDecimal price;
+
+    @PrePersist
+    public void updateLastUpdated() {
+        lastUpdated = new Timestamp(System.currentTimeMillis());
+    }
 
     public long getId() {
         return id;

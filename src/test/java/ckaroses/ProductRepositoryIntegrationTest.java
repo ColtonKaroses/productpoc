@@ -29,7 +29,6 @@ public class ProductRepositoryIntegrationTest {
     private final String PRODUCT_NAME = "testProduct";
     private final String CATAGORY = "test";
     private final String SKU = "test123";
-    private final Timestamp DATETIME = new Timestamp(0);
     private final BigDecimal PRICE = new BigDecimal("2.99");
 
     @Before
@@ -38,7 +37,6 @@ public class ProductRepositoryIntegrationTest {
         product.setName(PRODUCT_NAME);
         product.setCategory(CATAGORY);
         product.setSku(SKU);
-        product.setLastUpdated(DATETIME);
         product.setPrice(PRICE);
         this.product = product;
     }
@@ -56,7 +54,6 @@ public class ProductRepositoryIntegrationTest {
             Assert.assertEquals(PRODUCT_NAME, storedProduct.getName());
             Assert.assertEquals(CATAGORY, storedProduct.getCategory());
             Assert.assertEquals(SKU, storedProduct.getSku());
-            Assert.assertEquals(DATETIME, storedProduct.getLastUpdated());
             Assert.assertEquals(PRICE, storedProduct.getPrice());
         } catch (Exception e) {
             Assert.fail("Product failed to be stored");
@@ -79,12 +76,6 @@ public class ProductRepositoryIntegrationTest {
     @Test(expected = DataIntegrityViolationException.class)
     public void nullSkuTest() {
         product.setSku(null);
-        productRepository.save(product);
-    }
-
-    @Test(expected = DataIntegrityViolationException.class)
-    public void nullLastUpdatedTest() {
-        product.setLastUpdated(null);
         productRepository.save(product);
     }
 
