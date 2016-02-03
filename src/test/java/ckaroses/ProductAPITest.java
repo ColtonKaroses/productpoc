@@ -45,7 +45,6 @@ public class ProductAPITest {
     private final String SKU3 = "test3";
     private final String SKU4 = "test4";
 
-    private final Timestamp DATETIME = new Timestamp(0);
     private final BigDecimal PRICE = new BigDecimal("2.99");
 
     private Product product;
