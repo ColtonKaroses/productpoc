@@ -2,11 +2,9 @@ package ckaroses;
 
 import org.springframework.data.annotation.LastModifiedDate;
 
-import javax.annotation.Nullable;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
 
 /**
  * Created by colton on 2/1/16.
@@ -14,6 +12,16 @@ import java.time.LocalDateTime;
 
 @Entity
 public class Product {
+
+    public Product() {}
+
+    public Product(String sku, String name, String category, BigDecimal price) {
+        this.sku = sku;
+        this.name = name;
+        this.category = category;
+        this.price = price;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
@@ -43,47 +51,40 @@ public class Product {
         return id;
     }
 
-    public void setId(long id) {
-        this.id = id;
-    }
-
     public String getSku() {
         return sku;
-    }
-
-    public void setSku(String sku) {
-        this.sku = sku;
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public String getCategory() {
         return category;
     }
-
-    public void setCategory(String category) {
-        this.category = category;
-    }
-
     public Timestamp getLastUpdated() {
         return lastUpdated;
-    }
-
-    public void setLastUpdated(Timestamp lastUpdated) {
-        this.lastUpdated = lastUpdated;
     }
 
     public Number getPrice() {
         return price;
     }
 
-    public void setPrice(BigDecimal price) {
-        this.price = price;
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Product)) {
+            return false;
+        }
+
+        Product product = (Product) o;
+        if (id != product.getId() ||
+                !sku.equals(product.getSku()) ||
+                !name.equalsIgnoreCase(product.getName()) ||
+                !category.equalsIgnoreCase(product.getCategory()) ||
+                !price.equals(product.getPrice())) {
+            return false;
+        }
+        return true;
+
     }
 }
