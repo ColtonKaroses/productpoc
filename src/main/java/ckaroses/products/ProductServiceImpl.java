@@ -1,4 +1,4 @@
-package ckaroses;
+package ckaroses.products;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

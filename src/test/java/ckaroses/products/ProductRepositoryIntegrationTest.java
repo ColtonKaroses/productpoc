@@ -1,5 +1,8 @@
-package ckaroses;
+package ckaroses.products;
 
+import ckaroses.Application;
+import ckaroses.products.Product;
+import ckaroses.products.ProductRepository;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Test;
@@ -13,16 +16,13 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.math.BigDecimal;
 
 /**
- * Created by colton on 2/3/16.
+ * Created by colton on 2/2/16.
  */
+
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(Application.class)
 @TestPropertySource(locations="classpath:test.properties")
-public class ProductServiceIntegrationTest {
-
-
-    @Autowired
-    ProductService productService;
+public class ProductRepositoryIntegrationTest {
 
     @Autowired
     ProductRepository productRepository;
@@ -41,8 +41,8 @@ public class ProductServiceIntegrationTest {
     public void addProductTest() {
         Product product = new Product(SKU, PRODUCT_NAME, CATAGORY, PRICE);
         try {
-            productService.addProduct(product);
-            Product storedProduct = productService.getProduct(product.getId());
+            Product id = productRepository.save(product);
+            Product storedProduct = productRepository.findOne(id.getId());
             Assert.assertEquals(PRODUCT_NAME, storedProduct.getName());
             Assert.assertEquals(CATAGORY, storedProduct.getCategory());
             Assert.assertEquals(SKU, storedProduct.getSku());
@@ -52,37 +52,52 @@ public class ProductServiceIntegrationTest {
         }
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = DataIntegrityViolationException.class)
     public void nullNameTest() {
         Product product = new Product(SKU, null, CATAGORY, PRICE);
-        productService.addProduct(product);
+        productRepository.save(product).getName();
     }
 
-    @Test(expected = IllegalArgumentException.class)
+
+    @Test(expected = DataIntegrityViolationException.class)
     public void nullCategoryTest() {
         Product product = new Product(SKU, PRODUCT_NAME, null, PRICE);
-        productService.addProduct(product);
+        productRepository.save(product);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = DataIntegrityViolationException.class)
     public void nullSkuTest() {
         Product product = new Product(null, PRODUCT_NAME, CATAGORY, PRICE);
-        productService.addProduct(product);
+        productRepository.save(product);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = DataIntegrityViolationException.class)
     public void nullPriceTest() {
         Product product = new Product(SKU, PRODUCT_NAME, CATAGORY, null);
-        productService.addProduct(product);
+        productRepository.save(product);
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void nullGetProductIdTest() {
-        productService.getProduct(null);
+    @Test(expected = DataIntegrityViolationException.class)
+    public void uniqueSkuTest() {
+        Product product = new Product(SKU, PRODUCT_NAME, CATAGORY, PRICE);
+        productRepository.save(product);
+
+        Product product2 = new Product(SKU, PRODUCT_NAME, CATAGORY, PRICE);
+        productRepository.save(product2);
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void nullGetProductsByNullCategoryTest() {
-        productService.getByCategory(null);
+    @Test
+    public void smallPriceTest() {
+        Product product = new Product(SKU, PRODUCT_NAME, CATAGORY, new BigDecimal("0.001"));
+        Product id = productRepository.save(product);
+        Product storedProduct = productRepository.findOne(id.getId());
+        Assert.assertEquals(new BigDecimal("0.00"), storedProduct.getPrice());
     }
+
+    @Test(expected = DataIntegrityViolationException.class)
+    public void largePriceTest() {
+        Product product = new Product(SKU, PRODUCT_NAME, CATAGORY, new BigDecimal("1234567890123456"));
+        productRepository.save(product);
+    }
+
 }

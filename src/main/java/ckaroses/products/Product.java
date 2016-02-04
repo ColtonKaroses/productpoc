@@ -1,4 +1,4 @@
-package ckaroses;
+package ckaroses.products;
 
 import org.springframework.data.annotation.LastModifiedDate;
 
@@ -48,7 +48,7 @@ public class Product {
         lastUpdated = new Timestamp(System.currentTimeMillis());
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
@@ -78,8 +78,7 @@ public class Product {
         }
 
         Product product = (Product) o;
-        if (id != product.getId() ||
-                !sku.equals(product.getSku()) ||
+        if (!sku.equals(product.getSku()) ||
                 !name.equalsIgnoreCase(product.getName()) ||
                 !category.equalsIgnoreCase(product.getCategory()) ||
                 !price.equals(product.getPrice())) {

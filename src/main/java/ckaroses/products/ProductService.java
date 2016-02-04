@@ -1,4 +1,4 @@
-package ckaroses;
+package ckaroses.products;
 
 /**
  * Created by colton on 2/2/16.

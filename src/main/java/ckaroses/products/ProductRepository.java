@@ -1,4 +1,4 @@
-package ckaroses;
+package ckaroses.products;
 
 import org.springframework.data.repository.CrudRepository;
 
