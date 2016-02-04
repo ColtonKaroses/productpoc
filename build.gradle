@@ -46,6 +46,10 @@ task buildDocker(type: Docker, dependsOn: build) {
     }
 }
 
+test {
+    exclude '**/*SystemTest*'
+}
+
 task wrapper(type: Wrapper) {
     gradleVersion = '2.10'
 }
