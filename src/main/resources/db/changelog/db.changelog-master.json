@@ -50,7 +50,7 @@
                 },
                 {
                   "column": {
-                    "name": "lastUpdated",
+                    "name": "last_updated",
                     "type": "datetime",
                     "constraints": {
                       "nullable": false
